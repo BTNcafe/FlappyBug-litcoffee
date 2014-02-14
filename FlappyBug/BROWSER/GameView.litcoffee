@@ -1,5 +1,5 @@
 FlappyBug game view.
-isisisisisis==
+====================
 
 	FlappyBug.GameView = CLASS
 
