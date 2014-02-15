@@ -79,7 +79,7 @@ FlappyBug home view.
 				]
 
 			ANIMATE
-				dom : modal.getDom()
+				node : modal
 				keyframes : KEYFRAMES
 					from :
 						transform : 'scaleY(0)'
@@ -94,7 +94,7 @@ FlappyBug home view.
 				TITLE CONFIG.defaultTitle
 
 				ANIMATE
-					dom : modal.getDom()
+					node : modal
 					keyframes : KEYFRAMES
 						from : 
 							transform : 'scaleY(100%)'

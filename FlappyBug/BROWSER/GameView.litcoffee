@@ -123,7 +123,7 @@ FlappyBug game view.
 
 			# show start panel.
 			ANIMATE
-				dom : startPanel.getDom()
+				node : startPanel
 				keyframes : KEYFRAMES
 					from :
 						transform : 'scaleY(0)'
@@ -226,7 +226,7 @@ FlappyBug game view.
 
 					# hide end modal.
 					ANIMATE
-						dom : endModal.getDom()
+						node : endModal
 						keyframes : KEYFRAMES
 							from :
 								transform : 'scaleY(0)'
@@ -241,7 +241,7 @@ FlappyBug game view.
 
 				# hide start panel.
 				ANIMATE
-					dom : startPanel.getDom()
+					node : startPanel
 					keyframes : KEYFRAMES
 						from :
 							transform : 'scaleY(100%)'
@@ -329,7 +329,7 @@ FlappyBug game view.
 				if endModal isnt undefined
 
 					ANIMATE
-						dom : endModal.getDom()
+						node : endModal
 						keyframes : KEYFRAMES
 							from :
 								transform : 'scaleY(100%)'

@@ -1,7 +1,7 @@
 FlappyBug BOOT
 ==============
 
-	require './UPPERCASE/BOOT.js'
+	require './COFFEECASE/BOOT.coffee'
 
 	BOOT 
 		CONFIG :
