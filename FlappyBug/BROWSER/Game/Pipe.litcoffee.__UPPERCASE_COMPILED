@@ -1,0 +1,81 @@
+//1392403117000
+(function() {
+  FlappyBug('Game').Pipe = CLASS({
+    init: function(cls, inner, self, params, onPass) {
+      var Bug, appendTo, bug, dpipe, isPassed, layer, left, moveLoop, passSound, pipes, remove, removeMoveLoop, top, upipe;
+      Bug = FlappyBug.Game.Bug;
+      pipes = params.pipes;
+      bug = params.bug;
+      passSound = SOUND({
+        mp3: FlappyBug.R_URI('pass.mp3'),
+        ogg: FlappyBug.R_URI('pass.ogg')
+      });
+      isPassed = void 0;
+      left = FlappyBug.GameView.gameWidth + 100;
+      top = Math.random() * 250 + 100;
+      layer = USCREEN.LAYER({
+        left: left,
+        top: top,
+        zIndex: 1
+      });
+      upipe = USCREEN.LAYER({
+        img: IMG({
+          src: FlappyBug.R('upipe.png')
+        }),
+        top: -470
+      }).appendTo(layer);
+      dpipe = USCREEN.LAYER({
+        img: IMG({
+          src: FlappyBug.R('dpipe.png')
+        }),
+        top: 30
+      }).appendTo(layer);
+      moveLoop = LOOP(function() {
+        var bugLeft, bugPosition, bugTop;
+        bugPosition = bug.getPosition();
+        bugLeft = bugPosition.left;
+        bugTop = bugPosition.top;
+        left -= 2;
+        layer.moveTo({
+          left: left
+        });
+        if (bugLeft - Bug.halfCollisionWidth < left + 40 && left < bugLeft + Bug.halfCollisionWidth && bugTop - Bug.halfCollisionHeight < top - 70 && top - 470 < bugTop + Bug.halfCollisionHeight) {
+          bug.die();
+        } else if (bugLeft - Bug.halfCollisionWidth < left + 40 && left < bugLeft + Bug.halfCollisionWidth && bugTop - Bug.halfCollisionHeight < top + 430 && top + 30 < bugTop + Bug.halfCollisionHeight) {
+          bug.die();
+        }
+        if (isPassed !== true && bugLeft - Bug.halfCollisionWidth >= left && left + 40 >= bugLeft + Bug.halfCollisionWidth) {
+          onPass();
+          isPassed = true;
+          passSound.play();
+        }
+        if (left < -100) {
+          return remove();
+        }
+      });
+      layer.addAfterRemoveProc(function() {
+        if (moveLoop !== void 0) {
+          moveLoop.remove();
+        }
+        return REMOVE({
+          data: pipes,
+          value: self
+        });
+      });
+      self.appendTo = appendTo = function(parent) {
+        layer.appendTo(parent);
+        return self;
+      };
+      self.remove = remove = function() {
+        return layer.remove();
+      };
+      return self.removeMoveLoop = removeMoveLoop = function() {
+        if (moveLoop !== void 0) {
+          moveLoop.remove();
+          return moveLoop = void 0;
+        }
+      };
+    }
+  });
+
+}).call(this);

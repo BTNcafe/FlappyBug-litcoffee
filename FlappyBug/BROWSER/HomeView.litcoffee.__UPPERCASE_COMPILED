@@ -1,0 +1,110 @@
+//1392486225000
+(function() {
+  FlappyBug.HomeView = CLASS({
+    preset: function() {
+      return VIEW;
+    },
+    init: function(cls, inner, self) {
+      var buttonStyle, close, modal;
+      TITLE('FlappyBug :: Home');
+      modal = UUI.MODAL({
+        isCannotClose: true,
+        wrapperStyle: {
+          backgroundColor: '#73BE31',
+          zIndex: 999
+        },
+        contentStyle: {
+          padding: 20,
+          paddingBottom: 15,
+          textAlign: 'center'
+        },
+        childs: [
+          H1({
+            childs: [
+              IMG({
+                src: FlappyBug.R('logo.png')
+              }), '\nbuilt with UPPERCASE'
+            ]
+          }), UUI.BUTTON({
+            style: buttonStyle = {
+              marginTop: 10,
+              padding: 10,
+              backgroundColor: '#fff',
+              color: '#666',
+              borderRadius: 10
+            },
+            title: 'CANVAS START',
+            onTap: function() {
+              BROWSER_CONFIG.USCREEN = {
+                isLayerOnCanvas: true
+              };
+              return FlappyBug.GO('Game');
+            }
+          }), UUI.BUTTON({
+            style: buttonStyle,
+            title: 'DOM START',
+            onTap: function() {
+              BROWSER_CONFIG.USCREEN = {
+                isLayerOnCanvas: false
+              };
+              return FlappyBug.GO('Game');
+            }
+          }), DIV({
+            style: {
+              marginTop: 10
+            },
+            childs: [
+              A({
+                href: 'https:#github.com/BTNcafe/FlappyBug',
+                target: '_blank',
+                childs: ['SOURCE']
+              }), ' · ', A({
+                href: 'http:#uppercase.io',
+                target: '_blank',
+                childs: ['UPPERCASE.IO']
+              })
+            ]
+          }), Facebook.LikeButton({
+            style: {
+              marginTop: 10
+            },
+            href: 'http://flappybug.uppercase.io',
+            layout: 'button_count'
+          })
+        ]
+      });
+      ANIMATE({
+        node: modal,
+        keyframes: KEYFRAMES({
+          from: {
+            transform: 'scaleY(0)'
+          },
+          to: {
+            transform: 'scaleY(100%)'
+          }
+        }),
+        duration: 0.2,
+        timingFunction: 'ease-out'
+      });
+      return self.close = close = function() {
+        TITLE(CONFIG.defaultTitle);
+        return ANIMATE({
+          node: modal,
+          keyframes: KEYFRAMES({
+            from: {
+              transform: 'scaleY(100%)'
+            },
+            to: {
+              transform: 'scaleY(0)'
+            }
+          }),
+          duration: 0.2,
+          timingFunction: 'ease-in'
+        }, function() {
+          return modal.remove();
+        });
+      };
+    }
+  });
+
+}).call(this);

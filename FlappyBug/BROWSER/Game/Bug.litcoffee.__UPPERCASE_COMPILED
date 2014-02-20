@@ -1,0 +1,131 @@
+//1392403738000
+(function() {
+  FlappyBug('Game').Bug = CLASS({
+    statics: function(cls) {
+      cls.halfCollisionWidth = 30 / 2;
+      return cls.halfCollisionHeight = 20 / 2;
+    },
+    init: function(cls, inner, self, onDie) {
+      var animationLoop, appendTo, degree, die, dieSound, frameCount, g, getPosition, gravityLoop, gs, halfImgHeight, halfImgWidth, isDead, jump, jumpSound, layer, left, remove, top, waitingLoop, waitingLoopCount;
+      jumpSound = SOUND({
+        mp3: FlappyBug.R_URI('jump.mp3'),
+        ogg: FlappyBug.R_URI('jump.ogg')
+      });
+      dieSound = SOUND({
+        mp3: FlappyBug.R_URI('die.mp3'),
+        ogg: FlappyBug.R_URI('die.ogg')
+      });
+      waitingLoopCount = 0;
+      g = 9.80665;
+      gs = void 0;
+      left = 60;
+      top = 200;
+      halfImgWidth = void 0;
+      halfImgHeight = void 0;
+      degree = void 0;
+      isDead = void 0;
+      frameCount = 0;
+      gravityLoop = void 0;
+      layer = USCREEN.LAYER();
+      EVENT({
+        node: IMG({
+          src: FlappyBug.R('bug.png')
+        }),
+        name: 'load'
+      }, function(e, img) {
+        halfImgWidth = img.getWidth() / 2 / 2;
+        halfImgHeight = img.getHeight() / 2;
+        layer.setClipWidth(halfImgWidth * 2);
+        layer.setImg(img);
+        return layer.moveTo({
+          left: left - halfImgWidth,
+          top: top - halfImgHeight,
+          zIndex: 3
+        });
+      });
+      animationLoop = LOOP(20, function() {
+        layer.setClipLeft(frameCount * halfImgWidth * 2);
+        frameCount += 1;
+        if (frameCount >= 2) {
+          return frameCount = 0;
+        }
+      });
+      waitingLoop = LOOP(function() {
+        waitingLoopCount += 0.1;
+        top += (Math.sin(waitingLoopCount)) / 2;
+        return layer.moveTo({
+          top: top - halfImgHeight
+        });
+      });
+      layer.addAfterRemoveProc(function() {
+        if (animationLoop !== void 0) {
+          animationLoop.remove();
+        }
+        if (waitingLoop !== void 0) {
+          waitingLoop.remove();
+        }
+        if (gravityLoop !== void 0) {
+          return gravityLoop.remove();
+        }
+      });
+      self.appendTo = appendTo = function(parent) {
+        layer.appendTo(parent);
+        return self;
+      };
+      self.remove = remove = function() {
+        return layer.remove();
+      };
+      self.die = die = function() {
+        isDead = true;
+        dieSound.play();
+        animationLoop.remove();
+        animationLoop = void 0;
+        return onDie();
+      };
+      self.jump = jump = function() {
+        if (isDead !== true) {
+          gs = -5;
+          degree = -45;
+          jumpSound.play();
+          if (gravityLoop === void 0) {
+            waitingLoop.remove();
+            waitingLoop = void 0;
+            return gravityLoop = LOOP(function() {
+              if (top + gs < 400 - cls.halfCollisionHeight) {
+                top += gs;
+                gs += g / 60 * 1.5;
+                degree += 2;
+                if (degree > 90) {
+                  degree = 90;
+                }
+              } else {
+                top = 400 - cls.halfCollisionHeight;
+                if (isDead !== true) {
+                  die();
+                }
+              }
+              if (top < 0) {
+                top = 0;
+              }
+              layer.rotate({
+                centerLeft: 19,
+                centerTop: 19,
+                degree: degree
+              });
+              return layer.moveTo({
+                top: top - halfImgHeight
+              });
+            });
+          }
+        }
+      };
+      return self.getPosition = getPosition = function() {
+        return {
+          left: left,
+          top: top
+        };
+      };
+    }
+  });
+
+}).call(this);
